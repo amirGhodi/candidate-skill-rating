@@ -71,3 +71,113 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+
+## Notes:-
+-> Add responses collection before hitting the rating api and aggregate api
+candidate ID should be updated.
+response collection sample data:-
+{
+  "_id": {
+    "$oid": "666982b2d0a76734dd834c2c"
+  },
+  "candidateID": "666ab8b661a38700cc08e1af", 
+  "candidateResponse": [
+    {
+      "skillId": 1,
+      "difficulty_level": "easy",
+      "question": "What is node?",
+      "response": "",
+      "rating": 5
+    },
+    {
+      "skillId": 1,
+      "difficulty_level": "easy",
+      "question": "What is express?",
+      "rating": 5,
+      "response": ""
+    },
+    {
+      "skillId": 1,
+      "difficulty_level": "hard",
+      "question": "How to handle child processes in node?",
+      "rating": 4,
+      "response": ""
+    },
+    {
+      "skillId": 1,
+      "difficulty_level": "medium",
+      "question": "What are streams?",
+      "rating": 4,
+      "response": ""
+    }
+  ],
+  "__v": 0
+}
+## API's curls
+
+1) register user
+
+curl --location 'http://localhost:3000/auth/register' \
+--header 'Content-Type: application/json' \
+--data '{
+  "name": "Amir reviewer",
+  "role": "reviewer",
+  "password": "password123"
+}'
+
+2) login user
+
+curl --location 'http://localhost:3000/auth/login' \
+--header 'Content-Type: application/json' \
+--data '{
+  "name": "Amir reviewer",
+  "password": "password123"
+}'
+
+3) get all users
+
+curl --location 'http://localhost:3000/users' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFtaXIgY2FuZGlkYXRlIiwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTcxODI3NTIwMCwiZXhwIjoxNzE4Mjc4ODAwfQ.GlOTW85EQL_GHdFWTMYWlNkC904UvaSCt0mLEcTrQjQ'
+
+4) get user by Id
+
+curl --location 'http://localhost:3000/users/666acc33add503f14ecdb4cf' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFtaXIgY2FuZGlkYXRlIiwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTcxODI3NTIwMCwiZXhwIjoxNzE4Mjc4ODAwfQ.GlOTW85EQL_GHdFWTMYWlNkC904UvaSCt0mLEcTrQjQ'
+
+5) update user by id
+
+curl --location --request PUT 'http://localhost:3000/users/666acc33add503f14ecdb4cf' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFtaXIgY2FuZGlkYXRlIiwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTcxODI3NTIwMCwiZXhwIjoxNzE4Mjc4ODAwfQ.GlOTW85EQL_GHdFWTMYWlNkC904UvaSCt0mLEcTrQjQ' \
+--data '{
+  "name": "Amir reviewer"
+}'
+
+
+6) delete user by id
+
+curl --location --request DELETE 'http://localhost:3000/users/666acc33add503f14ecdb4cf' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFtaXIgY2FuZGlkYXRlIiwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTcxODI3NTIwMCwiZXhwIjoxNzE4Mjc4ODAwfQ.GlOTW85EQL_GHdFWTMYWlNkC904UvaSCt0mLEcTrQjQ'
+
+7) update rating 
+
+curl --location --request PUT 'http://localhost:3000/responses' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFtaXIgcmV2aWV3ZXIiLCJyb2xlIjoicmV2aWV3ZXIiLCJpYXQiOjE3MTgyNzUzMjUsImV4cCI6MTcxODI3ODkyNX0.ZPXibiRt-RvlwCuBPE0KDv4O1Zp8hk93vaB7KokYgZI' \
+--header 'Content-Type: application/json' \
+--data '{
+    "candidateID": "666ab8b661a38700cc08e1af",
+    "question": "What is node?",
+    "difficulty_level": "easy",
+    "rating": 5
+}'
+
+8) aggregate result 
+
+curl --location 'http://localhost:3000/responses/aggregate' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFtaXIgcmV2aWV3ZXIiLCJyb2xlIjoicmV2aWV3ZXIiLCJpYXQiOjE3MTgyNzUzMjUsImV4cCI6MTcxODI3ODkyNX0.ZPXibiRt-RvlwCuBPE0KDv4O1Zp8hk93vaB7KokYgZI' \
+--header 'Content-Type: application/json' \
+--data '{
+  "candidateID": "666ab8b661a38700cc08e1af"
+}'
