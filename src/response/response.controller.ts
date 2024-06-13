@@ -1,7 +1,8 @@
 // src/response/response.controller.ts
-import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards, Query, UseInterceptors } from '@nestjs/common';
 import { ResponseService } from './response.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+// import { ReviewerRoleMiddleware } from 'src/middleware/reviewer.middleware';
 
 @Controller('responses')
 export class ResponseController {
@@ -35,5 +36,11 @@ export class ResponseController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.responseService.deleteResponse(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('aggregate')
+  async getAggregatedRatings(@Body('candidateID') candidateID: string) {
+    return this.responseService.getAggregatedSkillRatings(candidateID);
   }
 }

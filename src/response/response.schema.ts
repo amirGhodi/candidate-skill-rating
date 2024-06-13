@@ -1,9 +1,5 @@
-// src/response/schemas/response.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import * as mongoose from 'mongoose';
-
-export type ResponseDocument = Response & Document;
 
 @Schema()
 export class CandidateResponse {
@@ -16,25 +12,21 @@ export class CandidateResponse {
   @Prop({ required: true })
   question: string;
 
-  @Prop()
+  @Prop({ required: true })
   response: string;
 
-  @Prop()
+  @Prop({ required: false })
   rating?: number;
 }
 
-const CandidateResponseSchema = SchemaFactory.createForClass(CandidateResponse);
-
 @Schema()
 export class Response {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, default: () => new mongoose.Types.ObjectId() })
-  _id: mongoose.Schema.Types.ObjectId;
-
   @Prop({ required: true })
   candidateID: string;
 
-  @Prop({ type: [CandidateResponseSchema], default: [] })
+  @Prop({ type: [CandidateResponse], required: true })
   candidateResponse: CandidateResponse[];
 }
 
+export type ResponseDocument = Response & Document;
 export const ResponseSchema = SchemaFactory.createForClass(Response);

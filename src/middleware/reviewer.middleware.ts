@@ -18,10 +18,6 @@ export class ReviewerRoleMiddleware implements NestMiddleware {
     }
 
     const payload = this.jwtService.verify(token);
-    console.log('payload', payload);
-    console.log('payload---', JSON.stringify(payload));
-    console.log('req---', req);
-    
     if (payload.role !== 'reviewer') {
       throw new UnauthorizedException('User does not have reviewer privileges');
     }

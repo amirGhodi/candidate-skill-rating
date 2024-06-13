@@ -46,4 +46,52 @@ export class ResponseService {
     }
     return deletedResponse;
   }
+
+  async getAggregatedSkillRatings(candidateID: string): Promise<any> {
+    const candidateResponses = await this.responseModel.find({ candidateID });
+    if (!candidateResponses) {
+      throw new NotFoundException('Candidate responses not found');
+    }
+
+    const skillRatings = {};
+
+    candidateResponses.forEach(response => {
+      response.candidateResponse.forEach(item => {
+        const { skillId, difficulty_level, rating } = item;
+        if (!skillRatings[skillId]) {
+          skillRatings[skillId] = { easy: [], medium: [], hard: [] };
+        }
+        skillRatings[skillId][difficulty_level].push(rating);
+      });
+    });
+
+    const aggregatedRatings = Object.keys(skillRatings).map(skillId => {
+      const easyRatings = skillRatings[skillId].easy;
+      const mediumRatings = skillRatings[skillId].medium;
+      const hardRatings = skillRatings[skillId].hard;
+
+      const easyCount = easyRatings.length;
+      const mediumCount = mediumRatings.length;
+      const hardCount = hardRatings.length;
+
+      const totalRating = 
+        easyRatings.reduce((sum, r) => sum + r, 0) * 1 +
+        mediumRatings.reduce((sum, r) => sum + r, 0) * 2 +
+        hardRatings.reduce((sum, r) => sum + r, 0) * 3;
+
+      const totalCount = 
+        easyCount * 1 + 
+        mediumCount * 2 + 
+        hardCount * 3;
+
+      const aggregatedRating = totalCount ? totalRating / totalCount : 0;
+
+      return {
+        skillId,
+        rating: parseFloat(aggregatedRating.toFixed(1))
+      };
+    });
+
+    return aggregatedRatings;
+  }
 }

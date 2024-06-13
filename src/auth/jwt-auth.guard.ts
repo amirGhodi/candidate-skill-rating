@@ -11,7 +11,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(private readonly jwtService: JwtService) {
     super(jwtService);
     JWTServices = this.jwtService;
-    console.log("jwer====", JWTServices)
   }
   
 

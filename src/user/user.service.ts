@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './user.schema';
@@ -20,6 +20,10 @@ export class UserService {
   }
 
   async create(user: User): Promise<User> {
+    const existingUser = await this.userModel.findOne({ name: user.name, role: user.role });
+    if (existingUser) {
+      throw new ConflictException('User with this name and role already exists');
+    }
     const createdUser = new this.userModel(user);
     return createdUser.save();
   }

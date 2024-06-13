@@ -8,7 +8,7 @@ import { UserModule } from '../user/user.module';
   imports: [
     UserModule,
     JwtModule.register({
-      secret: 'secretKey', // Use environment variable in production
+      secret: 'secretKey',
       signOptions: { expiresIn: '60m' },
     }),
   ],
